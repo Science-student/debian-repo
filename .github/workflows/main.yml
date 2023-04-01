@@ -10,7 +10,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Download Deb
       run: |
-        URL=$(cat package.list)
+        URL=$(cat packages.list)
         FILENAME=$(curl -sI $URL | grep -o -E 'filename=.*$' | sed 's/filename=//' | tr -d '\r')
         curl -L -o packages/$FILENAME $URL
     - name: Commit changes
