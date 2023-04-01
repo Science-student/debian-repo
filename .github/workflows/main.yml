@@ -1,0 +1,22 @@
+name: Download Deb
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Download Deb
+      run: |
+        URL=$(cat package.list)
+        FILENAME=$(curl -sI $URL | grep -o -E 'filename=.*$' | sed 's/filename=//' | tr -d '\r')
+        curl -L -o packages/$FILENAME $URL
+    - name: Commit changes
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+        git add packages/
+        git commit -m "Add latest deb file"
+        git push
